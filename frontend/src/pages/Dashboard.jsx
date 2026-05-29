@@ -1,15 +1,27 @@
-import Header from "../components/Header";
+import UploadSection from "../components/UploadSection";
+import DocumentTable from "../components/DocumentTable";
+import NotificationBell from "../components/NotificationBell";
+import AIAssistant from "../components/AIAssistant";
 
 export default function Dashboard() {
   return (
-    <div className="min-h-screen bg-slate-50">
-      <Header />
-
-      <div className="p-6">
-        <h2 className="text-2xl font-bold">
-          SWS AI Document Hub
-        </h2>
+    <div>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          padding: "20px"
+        }}
+      >
+        <h1>SWS AI Document Hub</h1>
+        <NotificationBell />
       </div>
+
+      <UploadSection />
+
+      <DocumentTable />
+
+      <AIAssistant />
     </div>
   );
 }

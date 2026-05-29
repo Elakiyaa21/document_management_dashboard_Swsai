@@ -28,8 +28,19 @@ public class DocumentController {
         );
     }
 
+    @PostMapping("/upload-multiple")
+    public ResponseEntity<List<Document>> uploadMultipleFiles(
+            @RequestParam("files") MultipartFile[] files
+    ) throws IOException {
+
+        return ResponseEntity.ok(
+                documentService.uploadMultipleFiles(files)
+        );
+    }
+
     @GetMapping
     public ResponseEntity<List<Document>> getDocuments() {
+
         return ResponseEntity.ok(
                 documentService.getAllDocuments()
         );

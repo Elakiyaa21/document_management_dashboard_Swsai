@@ -10,13 +10,15 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/notifications")
 @RequiredArgsConstructor
-@CrossOrigin("*")
+@CrossOrigin(origins = "*")
 public class NotificationController {
 
     private final NotificationService notificationService;
 
     @GetMapping
     public List<Notification> getNotifications() {
-        return notificationService.getAllNotifications();
+
+        return notificationService
+                .getAllNotifications();
     }
 }

@@ -14,7 +14,9 @@ public class NotificationService {
 
     private final NotificationRepository notificationRepository;
 
-    public Notification createNotification(String message) {
+    public Notification createNotification(
+            String message
+    ) {
 
         Notification notification =
                 Notification.builder()
@@ -23,10 +25,13 @@ public class NotificationService {
                         .createdAt(LocalDateTime.now())
                         .build();
 
-        return notificationRepository.save(notification);
+        return notificationRepository.save(
+                notification
+        );
     }
 
     public List<Notification> getAllNotifications() {
+
         return notificationRepository.findAll();
     }
 }

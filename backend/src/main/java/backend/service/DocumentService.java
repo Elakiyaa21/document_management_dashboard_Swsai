@@ -9,6 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -19,9 +20,13 @@ public class DocumentService {
     private final NotificationService notificationService;
 
     private final String UPLOAD_DIR =
-            System.getProperty("user.dir") + "/uploads/";
+            System.getProperty("user.dir")
+                    + File.separator
+                    + "uploads";
 
-    public Document uploadFile(MultipartFile file) throws IOException {
+    public Document uploadFile(
+            MultipartFile file
+    ) throws IOException {
 
         File uploadDir = new File(UPLOAD_DIR);
 
@@ -29,9 +34,10 @@ public class DocumentService {
             uploadDir.mkdirs();
         }
 
-        String filePath = UPLOAD_DIR + file.getOriginalFilename();
-
-        System.out.println("Saving file to: " + filePath);
+        String filePath =
+                uploadDir.getAbsolutePath()
+                        + File.separator
+                        + file.getOriginalFilename();
 
         file.transferTo(new File(filePath));
 
@@ -44,16 +50,45 @@ public class DocumentService {
                 .uploadDate(LocalDateTime.now())
                 .build();
 
-        Document savedDocument = documentRepository.save(document);
+        Document savedDocument =
+                documentRepository.save(document);
 
         notificationService.createNotification(
-                file.getOriginalFilename() + " uploaded successfully"
+                file.getOriginalFilename()
+                        + " uploaded successfully"
         );
 
         return savedDocument;
     }
 
+    public List<Document> uploadMultipleFiles(
+            MultipartFile[] files
+    ) throws IOException {
+
+        List<Document> uploadedFiles =
+                new ArrayList<>();
+
+        for (MultipartFile file : files) {
+
+            uploadedFiles.add(
+                    uploadFile(file)
+            );
+        }
+
+        if (files.length >= 4) {
+
+            notificationService.createNotification(
+                    "Bulk upload completed. "
+                            + files.length
+                            + " files uploaded."
+            );
+        }
+
+        return uploadedFiles;
+    }
+
     public List<Document> getAllDocuments() {
+
         return documentRepository.findAll();
     }
 }
