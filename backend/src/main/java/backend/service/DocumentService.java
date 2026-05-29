@@ -16,8 +16,10 @@ import java.util.List;
 public class DocumentService {
 
     private final DocumentRepository documentRepository;
+    private final NotificationService notificationService;
 
-    private final String UPLOAD_DIR = "uploads/";
+    private final String UPLOAD_DIR =
+            System.getProperty("user.dir") + "/uploads/";
 
     public Document uploadFile(MultipartFile file) throws IOException {
 
@@ -28,6 +30,8 @@ public class DocumentService {
         }
 
         String filePath = UPLOAD_DIR + file.getOriginalFilename();
+
+        System.out.println("Saving file to: " + filePath);
 
         file.transferTo(new File(filePath));
 
@@ -40,7 +44,13 @@ public class DocumentService {
                 .uploadDate(LocalDateTime.now())
                 .build();
 
-        return documentRepository.save(document);
+        Document savedDocument = documentRepository.save(document);
+
+        notificationService.createNotification(
+                file.getOriginalFilename() + " uploaded successfully"
+        );
+
+        return savedDocument;
     }
 
     public List<Document> getAllDocuments() {

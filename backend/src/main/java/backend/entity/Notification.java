@@ -6,7 +6,6 @@ import lombok.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "notifications")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -19,8 +18,6 @@ public class Notification {
     private Long id;
 
     private String message;
-
-    private String type;
 
     private Boolean isRead;
 
